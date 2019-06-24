@@ -7,7 +7,7 @@ import os
 sys.path.append("./conf")
 import config
 from data_utils import Data
-from char_cnn import CharConvNet
+from deepedr import EDRConvNet
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from sklearn.metrics import recall_score,accuracy_score
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
         with sess.as_default():
 
-            char_cnn = CharConvNet(conv_layers = config.conv_layers,
+            deepedr = EDRConvNet(conv_layers = config.conv_layers,
                                    fully_layers = config.fully_connected_layers,
                                    l0 = config.l0,
                                    alphabet_size = config.alphabet_size,
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
             #optimizer = tf.train.MomentumOptimizer(learning_rate, config.training.momentum)
             optimizer = tf.train.AdamOptimizer(config.base_rate)
-            grads_and_vars = optimizer.compute_gradients(char_cnn.loss)
+            grads_and_vars = optimizer.compute_gradients(deepedr.loss)
             train_op = optimizer.apply_gradients(grads_and_vars, global_step = global_step)
 
             # Keep track of gradient values and sparsity (optional)
@@ -98,8 +98,8 @@ if __name__ == '__main__':
             print("Writing to {}\n".format(out_dir))
 
             # Summaries for loss and accuracy
-            loss_summary = tf.summary.scalar("loss", char_cnn.loss)
-            acc_summary = tf.summary.scalar("accuracy", char_cnn.accuracy)
+            loss_summary = tf.summary.scalar("loss", deepedr.loss)
+            acc_summary = tf.summary.scalar("accuracy", deepedr.accuracy)
 
             # Train Summaries
             train_summary_op = tf.summary.merge([loss_summary, acc_summary, grad_summaries_merged])
@@ -126,16 +126,16 @@ if __name__ == '__main__':
                 A single training step
                 """
                 feed_dict = {
-                  char_cnn.input_x: x_batch,
-                  char_cnn.input_y: y_batch,
-                  char_cnn.dropout_keep_prob: config.p
+                  deepedr.input_x: x_batch,
+                  deepedr.input_y: y_batch,
+                  deepedr.dropout_keep_prob: config.p
                 }
                 _, step, summaries, loss, accuracy = sess.run(
                     [train_op,
                      global_step,
                      train_summary_op,
-                     char_cnn.loss,
-                     char_cnn.accuracy],
+                     deepedr.loss,
+                     deepedr.accuracy],
                     feed_dict)
 
                 time_str = datetime.datetime.now().isoformat()
@@ -149,18 +149,18 @@ if __name__ == '__main__':
                 """
 
                 feed_dict = {
-                  char_cnn.input_x: x_batch,
-                  char_cnn.input_y: y_batch,
-                  char_cnn.dropout_keep_prob: 1.0 # Disable dropout
+                  deepedr.input_x: x_batch,
+                  deepedr.input_y: y_batch,
+                  deepedr.dropout_keep_prob: 1.0 # Disable dropout
                 }
                 step, summaries, loss, accuracy, _pred, _valid,  valid = sess.run(
                     [global_step,
                      dev_summary_op,
-                     char_cnn.loss,
-                     char_cnn.accuracy,
-                     char_cnn.predictions,
-                     char_cnn.y_valid,
-                     char_cnn.input_y,
+                     deepedr.loss,
+                     deepedr.accuracy,
+                     deepedr.predictions,
+                     deepedr.y_valid,
+                     deepedr.input_y,
                      ],
                     feed_dict)
                 time_str = datetime.datetime.now().isoformat()

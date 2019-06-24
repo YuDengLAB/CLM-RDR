@@ -12,7 +12,7 @@ from itertools import cycle
 from scipy import interp
 from sklearn.preprocessing import label_binarize
 
-class CharConvNet(object):
+class EDRConvNet(object):
 
     def __init__(self,
                 conv_layers = [

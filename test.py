@@ -5,7 +5,7 @@ import numpy as np
 sys.path.append("./conf")
 import config
 from data_utils import Data
-from char_cnn import CharConvNet
+from deepedr import EDRConvNet
 if __name__ == '__main__':
     sess = tf.Session()
     saver = tf.train.import_meta_graph('./runs/1559730669/checkpoints/model-16400.meta')
