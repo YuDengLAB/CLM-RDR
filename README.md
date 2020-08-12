@@ -2,8 +2,6 @@
 A Classification Model between cRBSs and the average Dynamic Range(CLM-RDR) is useful for predicting the dynamic range of biosensor designed by various cross-RBS(cRBS). The cRBS sequence dataset used to train CLM-RDR is rationally designed by analysis of variance (ANOVA) and WebLogo. CLM-RDR is useful for achieving the fine-tuning of biosensor.
 
 ## Update the overall code to support python3 and Update the model to enable processing of numerical features
-# Result
-![image](https://github.com/YuDengLAB/CLM-RDR/blob/master/ROC%20with%20Numerical.png)
 
 # How to train?
 
