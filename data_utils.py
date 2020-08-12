@@ -4,17 +4,18 @@ from math import sqrt
 import time
 import datetime
 import sys
+import pandas as pd
 import os
 sys.path.append("./conf")
-import config
+from conf import config
 
 class Data(object):
     
     def __init__(self,
                  data_source,
-                 alphabet="abcdefghijklmnopqrstuvwxyz0123456789",
-	             l0 = 150,
-	             batch_size = 128,
+                 alphabet="abcdefghijklmnopqrstuvwxyz0123456789.%",
+	             l0 = 300,
+	             batch_size = 64,
                  no_of_classes=5):
 
         self.alphabet = alphabet
@@ -23,7 +24,6 @@ class Data(object):
         self.no_of_classes = no_of_classes
         for i, c in enumerate(self.alphabet):
             self.dict[c] = i + 1
-
         
         self.length = l0
         self.batch_size = batch_size
@@ -31,54 +31,36 @@ class Data(object):
 
     def loadData(self):
         data = []
-        row0 = []
-        row1 = []
-        row2 = ''
         with open(self.data_source, 'r') as rdr:
-            # rdr = csv.reader(f, delimiter=',')
-            i = 0
             for row in rdr:
-                row1 = row.strip("\n").split(",")
+                row1 = row.strip("\n").replace(' ', '').split(",")
+                row_ = row1[0]
+                for li in range(1, len(row1)-1):  #Convert numerical features
+                    row_ += row1[li]
                 if len(row1) == 1:
                     row1.append('0')
-                row0 = list(row1[0])
-                row2 = ' '.join(row0)
-                # print(row2)
-                data.append((int(row1[1]), row2))
+                data.append((int(row1[-1]), row_))
         self.data = np.array(data)
         self.shuffled_data = self.data
-        # print(data)
 
     def load_Test_Data(self):
         data = []
-        row0 = []
-        row1 = []
-        row2 = ''
         with open(self.data_source, 'r') as rdr:
-            # rdr = csv.reader(f, delimiter=',')
-            i = 0
             for row in rdr:
                 row1 = row.strip("\n").split(",")
+                row_ = row1[0]
+                for li in range(1, len(row1) - 1):  #Convert numerical features
+                    row_ += row1[li]
                 if len(row1) == 1:
                     row1.append('0')
-                row0 = list(row1[0])
-                row2 = ' '.join(row0)
-                # print(row2)
-                data.append(row2)
+                data.append(row_)
         self.data = np.array(data)
-
 
     def shuffleData(self):
         data_size = len(self.data)
-        
         shuffle_indices = np.random.permutation(np.arange(data_size))
         self.shuffled_data = self.data[shuffle_indices]         
 
-    # def getBatch(self, batch_num=0):
-    #     data_size = len(self.data)
-    #     start_index = batch_num * self.batch_size
-    #     end_index = min((batch_num + 1) * self.batch_size, data_size)
-    #     return self.shuffled_data[start_index:end_index]
 
     def getBatchToIndices(self, batch_num=0):
         data_size = len(self.data)
@@ -92,7 +74,6 @@ class Data(object):
             batch_indices.append(self.strToIndexs(s))
             c = int(c) - 1
             classes.append(one_hot[c])
-
         return np.asarray(batch_indices, dtype='int64'), classes
 
     def strToIndexs(self, s):
@@ -126,14 +107,7 @@ class Data(object):
         for s in test_data:
             test_.append(self.strToIndexs(s))
         return np.asarray(test_, dtype='int64')
-# if __name__ == '__main__':
-#     data = Data("./data/train.csv")
-##    E = np.eye(4)
-##    img = np.zeros((4, 15))
-##    idxs = data.strToIndexs('aghgbccdahbaml')
-##    print idxs
-    
-    # data.loadData()
+
 
 
 
