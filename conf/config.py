@@ -24,10 +24,10 @@ th = 1e-6
     
 # class Config(object):
 
-alphabet = "abcdefghijklmnopqrstuvwxyz0123456789"
+alphabet = "abcdefghijklmnopqrstuvwxyz0123456789.%"
 alphabet_size = len(alphabet)
-l0 = 1000
-batch_size = 64
+l0 = 220
+batch_size = 128
 no_of_classes = 5
 
 train_data_source = 'data/train.csv'
