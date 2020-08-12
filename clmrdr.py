@@ -24,8 +24,8 @@ class EDRConvNet(object):
                     [256, 3, 3]
                     ],
                  fully_layers = [1024, 1024],
-                 l0 = 300,
-                 alphabet_size = 36,
+                 l0 = 220,
+                 alphabet_size = 38,
                  no_of_classes = 5,
                  th = 1e-6):
 
@@ -41,7 +41,8 @@ class EDRConvNet(object):
             Q = tf.concat(
                           [
                               tf.zeros([1, alphabet_size]), # Zero padding vector for out of alphabet characters
-                              tf.one_hot(range(alphabet_size), alphabet_size, 1.0, 0.0) # one-hot vector representation for alphabets
+                              tf.one_hot([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,
+                                          29,30,31,32,33,34,35,36,37], alphabet_size, 1.0, 0.0) # one-hot vector representation for alphabets
                            ],0,
                           name='Q')
             
