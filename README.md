@@ -8,17 +8,17 @@ A Classification Model between cRBSs and the average Dynamic Range(CLM-RDR) is u
 2.in cmd
 
 ```python
-python2 training.py
+python3 training.py
 ```
 
 and  results will be saved to runs/
 
-# How to test?
+# How to test and predict?
 
 If you want to test with your own data, modify the test path in the conf/config.py file.
 
 ```python
-python2 test.py
+python3 test.py
 ```
 
 # How to plot?
@@ -31,6 +31,6 @@ python3 data_result.py
 
 # Prerequist
 
-1. Tensorflow-gpu==1.4.0
+1. Tensorflow-gpu==1.9.0
 2. sklearn, scipy, numpy, matplotlib
-3. Python == 2.7
+3. Python == 3.5
